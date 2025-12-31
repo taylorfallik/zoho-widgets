@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Products</title>
+    <script src="https://live.zwidgets.com/js-sdk/1.2/ZohoEmbededAppSDK.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            padding: 20px;
+            background: #ffffff;
+            color: #333;
+        }
+        
+        .filters {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+        }
+        
+        .filter-group select, .filter-group input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background: white;
+        }
+        
+        .year-section {
+            margin-bottom: 30px;
+        }
+        
+        .year-header {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .year-count {
+            font-size: 14px;
+            font-weight: 600;
+            color: #7f8c8d;
+            background: #ecf0f1;
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+        
+        .product-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-left: 5px solid #3498db;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        }
+        
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+        
+        .product-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .product-name:hover {
+            color: #3498db;
+        }
+        
+        .product-code {
+            font-size: 13px;
+            font-weight: 600;
+            color: #7f8c8d;
+            background: #ecf0f1;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-left: 10px;
+        }
+        
+        .product-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .detail-item {
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .detail-item strong {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        
+        .no-products {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+            font-size: 16px;
+            font-style: italic;
+        }
+        
+        .no-products:before {
+            content: "📦";
+            display: block;
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        
+        .loading:after {
+            content: "...";
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: "."; }
+            40% { content: ".."; }
+            60%, 100% { content: "..."; }
+        }
+        
+        .error {
+            text-align: center;
+            padding: 40px 20px;
+            color: #e74c3c;
+            background: #fadbd8;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        
+        .stats-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            border-radius: 8px;
+            color: white;
+        }
+        
+        .stat-item {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div id="stats-container"></div>
+    <div id="filters-container"></div>
+    <div id="products-container" class="loading">Loading products</div>
+    
+    <script>
+        let allProducts = [];
+        let filteredProducts = [];
+        
+        ZOHO.embeddedApp.on("PageLoad", function(data) {
+            var accountId = data.EntityId;
+            loadProducts(accountId);
+        });
+        
+        function loadProducts(accountId) {
+            var container = document.getElementById("products-container");
+            
+            // Get all invoices for this account
+            ZOHO.CRM.API.getRelatedRecords({
+                Entity: "Accounts",
+                RecordID: accountId,
+                RelatedList: "Invoices",
+                page: 1,
+                per_page: 200
+            }).then(function(response) {
+                if (!response.data || response.data.length === 0) {
+                    container.innerHTML = '<div class="no-products">No invoices found for this account</div>';
+                    return;
+                }
+                
+                processInvoices(response.data);
+            }).catch(function(error) {
+                container.innerHTML = '<div class="error">Error loading invoices. Please try again.</div>';
+            });
+        }
+        
+        function processInvoices(invoices) {
+            var allowedStatuses = ["Paid", "Being Processed", "NET 30 Email 1 Sent", "NET 30 Email 2 Sent", 
+                                   "NET 30 Email 3 Sent", "Overdue", "Invoice Sent", "Reissue Invoice w/ PO", 
+                                   "Invoice Reissued w/ PO"];
+            
+            var productMap = {};
+            var promises = [];
+            
+            invoices.forEach(function(invoice) {
+                if (!allowedStatuses.includes(invoice.Status)) return;
+                
+                var invoiceNumber = invoice.Invoice_No || invoice.Subject || "";
+                var invoiceDate = invoice.Invoice_Date || (invoice.Created_Time ? new Date(invoice.Created_Time).toISOString().split('T')[0] : "");
+                var quotationNumber = invoice.Quotation_Number || "No Quotation";
+                var dealName = invoice.Deal_Name__s ? invoice.Deal_Name__s.name : "";
+                
+                if (invoice.Product_Details && invoice.Product_Details.length > 0) {
+                    invoice.Product_Details.forEach(function(lineItem) {
+                        if (lineItem.product) {
+                            var productId = lineItem.product.id;
+                            
+                            // Fetch full product details
+                            var promise = ZOHO.CRM.API.getRecord({
+                                Entity: "Products",
+                                RecordID: productId
+                            }).then(function(prodResponse) {
+                                var product = prodResponse.data[0];
+                                var key = productId + "_" + invoiceNumber + "_" + quotationNumber;
+                                
+                                if (!productMap[key]) {
+                                    productMap[key] = {
+                                        productId: productId,
+                                        productName: lineItem.product.name || "Unnamed Product",
+                                        productCode: product.Product_Code || "",
+                                        invoiceNumber: invoiceNumber,
+                                        invoiceDate: invoiceDate,
+                                        quotationNumber: quotationNumber,
+                                        dealName: dealName,
+                                        year: invoiceDate ? invoiceDate.split('-')[0] : "Unknown"
+                                    };
+                                }
+                            });
+                            
+                            promises.push(promise);
+                        }
+                    });
+                }
+            });
+            
+            Promise.all(promises).then(function() {
+                allProducts = Object.values(productMap);
+                filteredProducts = allProducts;
+                displayProducts();
+                createFilters();
+                displayStats();
+            });
+        }
+        
+        function displayStats() {
+            var totalProducts = allProducts.length;
+            var uniqueProducts = new Set(allProducts.map(p => p.productId)).size;
+            var years = new Set(allProducts.map(p => p.year)).size;
+            
+            var statsHTML = '<div class="stats-bar">';
+            statsHTML += '<div class="stat-item"><div class="stat-value">' + totalProducts + '</div><div class="stat-label">Total Purchases</div></div>';
+            statsHTML += '<div class="stat-item"><div class="stat-value">' + uniqueProducts + '</div><div class="stat-label">Unique Products</div></div>';
+            statsHTML += '<div class="stat-item"><div class="stat-value">' + years + '</div><div class="stat-label">Years</div></div>';
+            statsHTML += '</div>';
+            
+            document.getElementById("stats-container").innerHTML = statsHTML;
+        }
+        
+        function createFilters() {
+            var years = [...new Set(allProducts.map(p => p.year))].sort().reverse();
+            var productNames = [...new Set(allProducts.map(p => p.productName))].sort();
+            
+            var filtersHTML = '<div class="filters">';
+            
+            // Year filter
+            filtersHTML += '<div class="filter-group">';
+            filtersHTML += '<label>Year</label>';
+            filtersHTML += '<select id="yearFilter" onchange="applyFilters()">';
+            filtersHTML += '<option value="">All Years</option>';
+            years.forEach(function(year) {
+                filtersHTML += '<option value="' + year + '">' + year + '</option>';
+            });
+            filtersHTML += '</select></div>';
+            
+            // Product filter
+            filtersHTML += '<div class="filter-group">';
+            filtersHTML += '<label>Product</label>';
+            filtersHTML += '<select id="productFilter" onchange="applyFilters()">';
+            filtersHTML += '<option value="">All Products</option>';
+            productNames.forEach(function(name) {
+                filtersHTML += '<option value="' + name + '">' + name + '</option>';
+            });
+            filtersHTML += '</select></div>';
+            
+            // Search
+            filtersHTML += '<div class="filter-group">';
+            filtersHTML += '<label>Search</label>';
+            filtersHTML += '<input type="text" id="searchFilter" placeholder="Invoice, Quotation, Deal..." onkeyup="applyFilters()">';
+            filtersHTML += '</div>';
+            
+            filtersHTML += '</div>';
+            
+            document.getElementById("filters-container").innerHTML = filtersHTML;
+        }
+        
+        function applyFilters() {
+            var yearFilter = document.getElementById("yearFilter").value;
+            var productFilter = document.getElementById("productFilter").value;
+            var searchFilter = document.getElementById("searchFilter").value.toLowerCase();
+            
+            filteredProducts = allProducts.filter(function(product) {
+                var matchYear = !yearFilter || product.year === yearFilter;
+                var matchProduct = !productFilter || product.productName === productFilter;
+                var matchSearch = !searchFilter || 
+                    product.invoiceNumber.toLowerCase().includes(searchFilter) ||
+                    product.quotationNumber.toLowerCase().includes(searchFilter) ||
+                    product.dealName.toLowerCase().includes(searchFilter) ||
+                    product.productName.toLowerCase().includes(searchFilter);
+                
+                return matchYear && matchProduct && matchSearch;
+            });
+            
+            displayProducts();
+        }
+        
+        function displayProducts() {
+            var container = document.getElementById("products-container");
+            
+            if (filteredProducts.length === 0) {
+                container.innerHTML = '<div class="no-products">No products match your filters</div>';
+                return;
+            }
+            
+            // Group by year
+            var productsByYear = {};
+            filteredProducts.forEach(function(product) {
+                if (!productsByYear[product.year]) {
+                    productsByYear[product.year] = [];
+                }
+                productsByYear[product.year].push(product);
+            });
+            
+            var html = '';
+            var years = Object.keys(productsByYear).sort().reverse();
+            
+            years.forEach(function(year) {
+                var products = productsByYear[year];
+                html += '<div class="year-section">';
+                html += '<div class="year-header">';
+                html += '<span>' + year + '</span>';
+                html += '<span class="year-count">' + products.length + ' product' + (products.length !== 1 ? 's' : '') + '</span>';
+                html += '</div>';
+                
+                products.forEach(function(product) {
+                    html += '<div class="product-card">';
+                    html += '<div class="product-header">';
+                    html += '<div class="product-name" onclick="openProduct(\'' + product.productId + '\')">' + product.productName + '</div>';
+                    if (product.productCode) {
+                        html += '<div class="product-code">' + product.productCode + '</div>';
+                    }
+                    html += '</div>';
+                    
+                    html += '<div class="product-details">';
+                    html += '<div class="detail-item"><strong>📅 Invoice Date:</strong> ' + (product.invoiceDate || '-') + '</div>';
+                    html += '<div class="detail-item"><strong>📄 Invoice No:</strong> ' + (product.invoiceNumber || '-') + '</div>';
+                    html += '<div class="detail-item"><strong>📋 Quotation:</strong> ' + product.quotationNumber + '</div>';
+                    if (product.dealName) {
+                        html += '<div class="detail-item"><strong>💼 Deal:</strong> ' + product.dealName + '</div>';
+                    }
+                    html += '</div>';
+                    
+                    html += '</div>';
+                });
+                
+                html += '</div>';
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function openProduct(productId) {
+            ZOHO.CRM.UI.Record.open({Entity:"Products", RecordID: productId});
+        }
+        
+        ZOHO.embeddedApp.init();
+    </script>
+</body>
+</html>
