@@ -217,30 +217,88 @@
         let allProducts = [];
         let filteredProducts = [];
         
-        ZOHO.embeddedApp.on("PageLoad", function(data) {
-            var accountId = data.EntityId;
-            loadProducts(accountId);
-        });
+        // Wait for ZOHO to be ready
+        if (typeof ZOHO === 'undefined') {
+            document.getElementById("products-container").innerHTML = '<div class="error">Widget must be loaded within Zoho CRM</div>';
+        } else {
+            ZOHO.embeddedApp.on("PageLoad", function(data) {
+                var accountId = data.EntityId;
+                loadProducts(accountId);
+            });
+            
+            ZOHO.embeddedApp.init();
+        }
         
         function loadProducts(accountId) {
             var container = document.getElementById("products-container");
+            var allInvoices = [];
             
-            // Get all invoices for this account
-            ZOHO.CRM.API.getRelatedRecords({
+            // First, get child accounts
+            ZOHO.CRM.API.searchRecord({
                 Entity: "Accounts",
-                RecordID: accountId,
-                RelatedList: "Invoices",
-                page: 1,
-                per_page: 200
-            }).then(function(response) {
-                if (!response.data || response.data.length === 0) {
-                    container.innerHTML = '<div class="no-products">No invoices found for this account</div>';
-                    return;
+                Type: "criteria",
+                Query: "(Parent_Account:equals:" + accountId + ")"
+            }).then(function(childResponse) {
+                var childAccountIds = [];
+                
+                if (childResponse.data && childResponse.data.length > 0) {
+                    childAccountIds = childResponse.data.map(function(child) {
+                        return child.id;
+                    });
                 }
                 
-                processInvoices(response.data);
+                // Add the parent account ID to the list
+                var accountIds = [accountId].concat(childAccountIds);
+                
+                // Get invoices for parent and all child accounts
+                var invoicePromises = accountIds.map(function(accId) {
+                    return ZOHO.CRM.API.getRelatedRecords({
+                        Entity: "Accounts",
+                        RecordID: accId,
+                        RelatedList: "Invoices",
+                        page: 1,
+                        per_page: 200
+                    }).then(function(response) {
+                        if (response.data && response.data.length > 0) {
+                            return response.data;
+                        }
+                        return [];
+                    }).catch(function() {
+                        return [];
+                    });
+                });
+                
+                Promise.all(invoicePromises).then(function(invoiceArrays) {
+                    // Flatten all invoices into one array
+                    invoiceArrays.forEach(function(invoices) {
+                        allInvoices = allInvoices.concat(invoices);
+                    });
+                    
+                    if (allInvoices.length === 0) {
+                        container.innerHTML = '<div class="no-products">No invoices found for this account or its child accounts</div>';
+                        return;
+                    }
+                    
+                    processInvoices(allInvoices);
+                });
             }).catch(function(error) {
-                container.innerHTML = '<div class="error">Error loading invoices. Please try again.</div>';
+                // If child search fails, just get parent invoices
+                ZOHO.CRM.API.getRelatedRecords({
+                    Entity: "Accounts",
+                    RecordID: accountId,
+                    RelatedList: "Invoices",
+                    page: 1,
+                    per_page: 200
+                }).then(function(response) {
+                    if (!response.data || response.data.length === 0) {
+                        container.innerHTML = '<div class="no-products">No invoices found for this account</div>';
+                        return;
+                    }
+                    
+                    processInvoices(response.data);
+                }).catch(function(error) {
+                    container.innerHTML = '<div class="error">Error loading invoices. Please try again.</div>';
+                });
             });
         }
         
@@ -431,8 +489,6 @@
         function openProduct(productId) {
             ZOHO.CRM.UI.Record.open({Entity:"Products", RecordID: productId});
         }
-        
-        ZOHO.embeddedApp.init();
     </script>
 </body>
 </html>
