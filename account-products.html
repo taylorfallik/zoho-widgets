@@ -317,6 +317,8 @@
                 var invoiceDate = invoice.Invoice_Date || (invoice.Created_Time ? new Date(invoice.Created_Time).toISOString().split('T')[0] : "");
                 var quotationNumber = invoice.Quotation_Number || "No Quotation";
                 var dealName = invoice.Deal_Name__s ? invoice.Deal_Name__s.name : "";
+                var accountName = invoice.Account_Name ? invoice.Account_Name.name : "Unknown Account";
+                var accountId = invoice.Account_Name ? invoice.Account_Name.id : "";
                 
                 if (invoice.Product_Details && invoice.Product_Details.length > 0) {
                     invoice.Product_Details.forEach(function(lineItem) {
@@ -340,6 +342,8 @@
                                         invoiceDate: invoiceDate,
                                         quotationNumber: quotationNumber,
                                         dealName: dealName,
+                                        accountName: accountName,
+                                        accountId: accountId,
                                         year: invoiceDate ? invoiceDate.split('-')[0] : "Unknown"
                                     };
                                 }
@@ -377,6 +381,7 @@
         function createFilters() {
             var years = [...new Set(allProducts.map(p => p.year))].sort().reverse();
             var productNames = [...new Set(allProducts.map(p => p.productName))].sort();
+            var accountNames = [...new Set(allProducts.map(p => p.accountName))].sort();
             
             var filtersHTML = '<div class="filters">';
             
@@ -387,6 +392,16 @@
             filtersHTML += '<option value="">All Years</option>';
             years.forEach(function(year) {
                 filtersHTML += '<option value="' + year + '">' + year + '</option>';
+            });
+            filtersHTML += '</select></div>';
+            
+            // Account filter
+            filtersHTML += '<div class="filter-group">';
+            filtersHTML += '<label>Account</label>';
+            filtersHTML += '<select id="accountFilter" onchange="applyFilters()">';
+            filtersHTML += '<option value="">All Accounts</option>';
+            accountNames.forEach(function(name) {
+                filtersHTML += '<option value="' + name + '">' + name + '</option>';
             });
             filtersHTML += '</select></div>';
             
@@ -413,19 +428,22 @@
         
         function applyFilters() {
             var yearFilter = document.getElementById("yearFilter").value;
+            var accountFilter = document.getElementById("accountFilter").value;
             var productFilter = document.getElementById("productFilter").value;
             var searchFilter = document.getElementById("searchFilter").value.toLowerCase();
             
             filteredProducts = allProducts.filter(function(product) {
                 var matchYear = !yearFilter || product.year === yearFilter;
+                var matchAccount = !accountFilter || product.accountName === accountFilter;
                 var matchProduct = !productFilter || product.productName === productFilter;
                 var matchSearch = !searchFilter || 
                     product.invoiceNumber.toLowerCase().includes(searchFilter) ||
                     product.quotationNumber.toLowerCase().includes(searchFilter) ||
                     product.dealName.toLowerCase().includes(searchFilter) ||
-                    product.productName.toLowerCase().includes(searchFilter);
+                    product.productName.toLowerCase().includes(searchFilter) ||
+                    product.accountName.toLowerCase().includes(searchFilter);
                 
-                return matchYear && matchProduct && matchSearch;
+                return matchYear && matchAccount && matchProduct && matchSearch;
             });
             
             displayProducts();
@@ -469,6 +487,7 @@
                     html += '</div>';
                     
                     html += '<div class="product-details">';
+                    html += '<div class="detail-item"><strong>🏢 Account:</strong> ' + product.accountName + '</div>';
                     html += '<div class="detail-item"><strong>📅 Invoice Date:</strong> ' + (product.invoiceDate || '-') + '</div>';
                     html += '<div class="detail-item"><strong>📄 Invoice No:</strong> ' + (product.invoiceNumber || '-') + '</div>';
                     html += '<div class="detail-item"><strong>📋 Quotation:</strong> ' + product.quotationNumber + '</div>';
