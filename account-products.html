@@ -2,512 +2,538 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Products</title>
-    <script src="https://live.zwidgets.com/js-sdk/1.2/ZohoEmbededAppSDK.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            font-family: Arial, sans-serif;
+            margin: 0;
             padding: 20px;
-            background: #ffffff;
-            color: #333;
+            background: #f5f5f5;
         }
-        
-        .filters {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        
-        .filter-group label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #555;
-            text-transform: uppercase;
-        }
-        
-        .filter-group select, .filter-group input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+        .container {
             background: white;
-        }
-        
-        .year-section {
-            margin-bottom: 30px;
-        }
-        
-        .year-header {
-            font-size: 22px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #3498db;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .year-count {
-            font-size: 14px;
-            font-weight: 600;
-            color: #7f8c8d;
-            background: #ecf0f1;
-            padding: 4px 12px;
-            border-radius: 12px;
-        }
-        
-        .product-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            border-left: 5px solid #3498db;
-            padding: 16px;
-            margin-bottom: 12px;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 900px;
         }
-        
-        .product-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-        }
-        
-        .product-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 12px;
-        }
-        
-        .product-name {
-            font-size: 18px;
-            font-weight: 700;
-            color: #2c3e50;
-            cursor: pointer;
-            flex: 1;
-        }
-        
-        .product-name:hover {
-            color: #3498db;
-        }
-        
-        .product-code {
-            font-size: 13px;
-            font-weight: 600;
-            color: #7f8c8d;
-            background: #ecf0f1;
-            padding: 4px 10px;
-            border-radius: 12px;
-            margin-left: 10px;
-        }
-        
-        .product-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .detail-item {
-            font-size: 14px;
-            color: #555;
-        }
-        
-        .detail-item strong {
-            color: #2c3e50;
-            font-weight: 600;
-            margin-right: 5px;
-        }
-        
-        .no-products {
-            text-align: center;
-            padding: 60px 20px;
-            color: #95a5a6;
-            font-size: 16px;
-            font-style: italic;
-        }
-        
-        .no-products:before {
-            content: "📦";
-            display: block;
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 60px 20px;
-            color: #7f8c8d;
-            font-size: 16px;
-        }
-        
-        .loading:after {
-            content: "...";
-            animation: dots 1.5s steps(4, end) infinite;
-        }
-        
-        @keyframes dots {
-            0%, 20% { content: "."; }
-            40% { content: ".."; }
-            60%, 100% { content: "..."; }
-        }
-        
-        .error {
-            text-align: center;
-            padding: 40px 20px;
-            color: #e74c3c;
-            background: #fadbd8;
-            border-radius: 8px;
-            font-size: 15px;
-        }
-        
-        .stats-bar {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+        .header {
+            background: #4a90e2;
+            color: white;
             padding: 15px;
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            border-radius: 8px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .toggle-btn {
+            padding: 8px 16px;
+            border: 2px solid #4a90e2;
+            background: white;
+            color: #4a90e2;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .toggle-btn.active {
+            background: #4a90e2;
             color: white;
         }
-        
-        .stat-item {
-            flex: 1;
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
             text-align: center;
+            flex: 1;
         }
-        
-        .stat-value {
+        .stat-number {
             font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 5px;
+            font-weight: bold;
+            color: #4a90e2;
         }
-        
         .stat-label {
             font-size: 12px;
-            opacity: 0.9;
-            text-transform: uppercase;
+            color: #666;
+            margin-top: 5px;
+        }
+        .account-section {
+            margin-bottom: 30px;
+        }
+        .account-header {
+            background: #e9ecef;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .account-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        .account-type {
+            background: #4a90e2;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .member-badge {
+            background: #6c757d;
+        }
+        .product {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .product-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .product-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 14px;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+        }
+        .label {
+            font-weight: bold;
+            color: #666;
+        }
+        .value {
+            color: #333;
+        }
+        .status {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .search-box {
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
         }
     </style>
 </head>
 <body>
-    <div id="stats-container"></div>
-    <div id="filters-container"></div>
-    <div id="products-container" class="loading">Loading products</div>
-    
+    <div class="container">
+        <div class="header">
+            <h2>Purchased Products</h2>
+            <div id="main-account-name">Loading account...</div>
+        </div>
+
+        <div class="view-toggle">
+            <button class="toggle-btn active" id="btn-all" onclick="changeView('all')">
+                All Accounts
+            </button>
+            <button class="toggle-btn" id="btn-main" onclick="changeView('main')">
+                Main Account Only
+            </button>
+            <button class="toggle-btn" id="btn-members" onclick="changeView('members')">
+                Member Accounts Only
+            </button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number" id="total-products">0</div>
+                <div class="stat-label">Total Products</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="total-accounts">0</div>
+                <div class="stat-label">Accounts</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="total-value">$0</div>
+                <div class="stat-label">Total Value</div>
+            </div>
+        </div>
+
+        <div class="search-box">
+            <input type="text" placeholder="Search products, accounts, quotations..." id="search">
+        </div>
+
+        <div id="products-container">
+            <div class="loading">Loading products...</div>
+        </div>
+    </div>
+
     <script>
-        let allProducts = [];
-        let filteredProducts = [];
-        
-        // Wait for ZOHO to be ready
-        if (typeof ZOHO === 'undefined') {
-            document.getElementById("products-container").innerHTML = '<div class="error">Widget must be loaded within Zoho CRM</div>';
-        } else {
-            ZOHO.embeddedApp.on("PageLoad", function(data) {
-                var accountId = data.EntityId;
-                loadProducts(accountId);
-            });
-            
-            ZOHO.embeddedApp.init();
-        }
-        
-        function loadProducts(accountId) {
-            var container = document.getElementById("products-container");
-            var allInvoices = [];
-            
-            // First, get child accounts
-            ZOHO.CRM.API.searchRecord({
-                Entity: "Accounts",
-                Type: "criteria",
-                Query: "(Parent_Account:equals:" + accountId + ")"
-            }).then(function(childResponse) {
-                var childAccountIds = [];
-                
-                if (childResponse.data && childResponse.data.length > 0) {
-                    childAccountIds = childResponse.data.map(function(child) {
-                        return child.id;
-                    });
-                }
-                
-                // Add the parent account ID to the list
-                var accountIds = [accountId].concat(childAccountIds);
-                
-                // Get invoices for parent and all child accounts
-                var invoicePromises = accountIds.map(function(accId) {
-                    return ZOHO.CRM.API.getRelatedRecords({
-                        Entity: "Accounts",
-                        RecordID: accId,
-                        RelatedList: "Invoices",
-                        page: 1,
-                        per_page: 200
-                    }).then(function(response) {
-                        if (response.data && response.data.length > 0) {
-                            return response.data;
-                        }
-                        return [];
-                    }).catch(function() {
-                        return [];
-                    });
-                });
-                
-                Promise.all(invoicePromises).then(function(invoiceArrays) {
-                    // Flatten all invoices into one array
-                    invoiceArrays.forEach(function(invoices) {
-                        allInvoices = allInvoices.concat(invoices);
-                    });
-                    
-                    if (allInvoices.length === 0) {
-                        container.innerHTML = '<div class="no-products">No invoices found for this account or its child accounts</div>';
-                        return;
+        console.log('Widget with member accounts loaded');
+
+        let currentView = 'all';
+        let mainAccountData = null;
+        let memberAccountsData = [];
+        let allProductsData = {
+            main: [],
+            members: []
+        };
+
+        // Sample data structure
+        const sampleData = {
+            mainAccount: {
+                id: '12345',
+                name: 'ACME Corporation',
+                products: [
+                    {
+                        name: "Enterprise Software License",
+                        proposal: "ACME Corp Q1 Package",
+                        quotation: "QUO-2024-001",
+                        quantity: "50",
+                        value: "$125,000",
+                        period: "Jan 2024 - Jan 2025",
+                        status: "active"
+                    },
+                    {
+                        name: "Cloud Storage Premium",
+                        proposal: "ACME Infrastructure",
+                        quotation: "QUO-2024-002",
+                        quantity: "5 TB",
+                        value: "$6,000",
+                        period: "Mar 2024 - Feb 2025",
+                        status: "active"
                     }
-                    
-                    processInvoices(allInvoices);
-                });
-            }).catch(function(error) {
-                // If child search fails, just get parent invoices
-                ZOHO.CRM.API.getRelatedRecords({
-                    Entity: "Accounts",
-                    RecordID: accountId,
-                    RelatedList: "Invoices",
-                    page: 1,
-                    per_page: 200
-                }).then(function(response) {
-                    if (!response.data || response.data.length === 0) {
-                        container.innerHTML = '<div class="no-products">No invoices found for this account</div>';
-                        return;
-                    }
-                    
-                    processInvoices(response.data);
-                }).catch(function(error) {
-                    container.innerHTML = '<div class="error">Error loading invoices. Please try again.</div>';
-                });
-            });
-        }
-        
-        function processInvoices(invoices) {
-            var allowedStatuses = ["Paid", "Being Processed", "NET 30 Email 1 Sent", "NET 30 Email 2 Sent", 
-                                   "NET 30 Email 3 Sent", "Overdue", "Invoice Sent", "Reissue Invoice w/ PO", 
-                                   "Invoice Reissued w/ PO"];
-            
-            var productMap = {};
-            var promises = [];
-            
-            invoices.forEach(function(invoice) {
-                if (!allowedStatuses.includes(invoice.Status)) return;
-                
-                var invoiceNumber = invoice.Invoice_No || invoice.Subject || "";
-                var invoiceDate = invoice.Invoice_Date || (invoice.Created_Time ? new Date(invoice.Created_Time).toISOString().split('T')[0] : "");
-                var quotationNumber = invoice.Quotation_Number || "No Quotation";
-                var dealName = invoice.Deal_Name__s ? invoice.Deal_Name__s.name : "";
-                var accountName = invoice.Account_Name ? invoice.Account_Name.name : "Unknown Account";
-                var accountId = invoice.Account_Name ? invoice.Account_Name.id : "";
-                
-                if (invoice.Product_Details && invoice.Product_Details.length > 0) {
-                    invoice.Product_Details.forEach(function(lineItem) {
-                        if (lineItem.product) {
-                            var productId = lineItem.product.id;
-                            
-                            // Fetch full product details
-                            var promise = ZOHO.CRM.API.getRecord({
-                                Entity: "Products",
-                                RecordID: productId
-                            }).then(function(prodResponse) {
-                                var product = prodResponse.data[0];
-                                var key = productId + "_" + invoiceNumber + "_" + quotationNumber;
-                                
-                                if (!productMap[key]) {
-                                    productMap[key] = {
-                                        productId: productId,
-                                        productName: lineItem.product.name || "Unnamed Product",
-                                        productCode: product.Product_Code || "",
-                                        invoiceNumber: invoiceNumber,
-                                        invoiceDate: invoiceDate,
-                                        quotationNumber: quotationNumber,
-                                        dealName: dealName,
-                                        accountName: accountName,
-                                        accountId: accountId,
-                                        year: invoiceDate ? invoiceDate.split('-')[0] : "Unknown"
-                                    };
-                                }
-                            });
-                            
-                            promises.push(promise);
+                ]
+            },
+            memberAccounts: [
+                {
+                    id: '12346',
+                    name: 'ACME East Region',
+                    products: [
+                        {
+                            name: "Professional Services",
+                            proposal: "East Region Implementation",
+                            quotation: "QUO-2024-003",
+                            quantity: "80 hours",
+                            value: "$12,000",
+                            period: "Feb 2024 - Apr 2024",
+                            status: "active"
                         }
-                    });
+                    ]
+                },
+                {
+                    id: '12347',
+                    name: 'ACME West Region',
+                    products: [
+                        {
+                            name: "Support Package",
+                            proposal: "West Region Support",
+                            quotation: "QUO-2024-004",
+                            quantity: "12 months",
+                            value: "$8,000",
+                            period: "Jan 2024 - Dec 2024",
+                            status: "pending"
+                        }
+                    ]
                 }
-            });
-            
-            Promise.all(promises).then(function() {
-                allProducts = Object.values(productMap);
-                filteredProducts = allProducts;
-                displayProducts();
-                createFilters();
-                displayStats();
-            });
-        }
-        
-        function displayStats() {
-            var totalProducts = allProducts.length;
-            var uniqueProducts = new Set(allProducts.map(p => p.productId)).size;
-            var years = new Set(allProducts.map(p => p.year)).size;
-            
-            var statsHTML = '<div class="stats-bar">';
-            statsHTML += '<div class="stat-item"><div class="stat-value">' + totalProducts + '</div><div class="stat-label">Total Purchases</div></div>';
-            statsHTML += '<div class="stat-item"><div class="stat-value">' + uniqueProducts + '</div><div class="stat-label">Unique Products</div></div>';
-            statsHTML += '<div class="stat-item"><div class="stat-value">' + years + '</div><div class="stat-label">Years</div></div>';
-            statsHTML += '</div>';
-            
-            document.getElementById("stats-container").innerHTML = statsHTML;
-        }
-        
-        function createFilters() {
-            var years = [...new Set(allProducts.map(p => p.year))].sort().reverse();
-            var productNames = [...new Set(allProducts.map(p => p.productName))].sort();
-            var accountNames = [...new Set(allProducts.map(p => p.accountName))].sort();
-            
-            var filtersHTML = '<div class="filters">';
-            
-            // Year filter
-            filtersHTML += '<div class="filter-group">';
-            filtersHTML += '<label>Year</label>';
-            filtersHTML += '<select id="yearFilter" onchange="applyFilters()">';
-            filtersHTML += '<option value="">All Years</option>';
-            years.forEach(function(year) {
-                filtersHTML += '<option value="' + year + '">' + year + '</option>';
-            });
-            filtersHTML += '</select></div>';
-            
-            // Account filter
-            filtersHTML += '<div class="filter-group">';
-            filtersHTML += '<label>Account</label>';
-            filtersHTML += '<select id="accountFilter" onchange="applyFilters()">';
-            filtersHTML += '<option value="">All Accounts</option>';
-            accountNames.forEach(function(name) {
-                filtersHTML += '<option value="' + name + '">' + name + '</option>';
-            });
-            filtersHTML += '</select></div>';
-            
-            // Product filter
-            filtersHTML += '<div class="filter-group">';
-            filtersHTML += '<label>Product</label>';
-            filtersHTML += '<select id="productFilter" onchange="applyFilters()">';
-            filtersHTML += '<option value="">All Products</option>';
-            productNames.forEach(function(name) {
-                filtersHTML += '<option value="' + name + '">' + name + '</option>';
-            });
-            filtersHTML += '</select></div>';
-            
-            // Search
-            filtersHTML += '<div class="filter-group">';
-            filtersHTML += '<label>Search</label>';
-            filtersHTML += '<input type="text" id="searchFilter" placeholder="Invoice, Quotation, Deal..." onkeyup="applyFilters()">';
-            filtersHTML += '</div>';
-            
-            filtersHTML += '</div>';
-            
-            document.getElementById("filters-container").innerHTML = filtersHTML;
-        }
-        
-        function applyFilters() {
-            var yearFilter = document.getElementById("yearFilter").value;
-            var accountFilter = document.getElementById("accountFilter").value;
-            var productFilter = document.getElementById("productFilter").value;
-            var searchFilter = document.getElementById("searchFilter").value.toLowerCase();
-            
-            filteredProducts = allProducts.filter(function(product) {
-                var matchYear = !yearFilter || product.year === yearFilter;
-                var matchAccount = !accountFilter || product.accountName === accountFilter;
-                var matchProduct = !productFilter || product.productName === productFilter;
-                var matchSearch = !searchFilter || 
-                    product.invoiceNumber.toLowerCase().includes(searchFilter) ||
-                    product.quotationNumber.toLowerCase().includes(searchFilter) ||
-                    product.dealName.toLowerCase().includes(searchFilter) ||
-                    product.productName.toLowerCase().includes(searchFilter) ||
-                    product.accountName.toLowerCase().includes(searchFilter);
-                
-                return matchYear && matchAccount && matchProduct && matchSearch;
-            });
-            
-            displayProducts();
-        }
-        
-        function displayProducts() {
-            var container = document.getElementById("products-container");
-            
-            if (filteredProducts.length === 0) {
-                container.innerHTML = '<div class="no-products">No products match your filters</div>';
-                return;
+            ]
+        };
+
+        function init() {
+            try {
+                if (typeof ZOHO !== 'undefined' && ZOHO.CRM && ZOHO.CRM.UI) {
+                    loadRealData();
+                } else {
+                    loadSampleData();
+                }
+            } catch (error) {
+                console.log('Error initializing:', error);
+                loadSampleData();
             }
-            
-            // Group by year
-            var productsByYear = {};
-            filteredProducts.forEach(function(product) {
-                if (!productsByYear[product.year]) {
-                    productsByYear[product.year] = [];
+
+            setupSearch();
+        }
+
+        async function loadRealData() {
+            try {
+                // Get current account
+                const accountData = await ZOHO.CRM.UI.Record.get();
+                if (accountData && accountData.data && accountData.data[0]) {
+                    mainAccountData = accountData.data[0];
+                    document.getElementById('main-account-name').textContent = 
+                        'Account: ' + mainAccountData.Account_Name;
+
+                    // Fetch main account products
+                    await fetchAccountProducts(mainAccountData.id, true);
+
+                    // Fetch member accounts
+                    await fetchMemberAccounts(mainAccountData.id);
+
+                    displayAll();
                 }
-                productsByYear[product.year].push(product);
-            });
+            } catch (error) {
+                console.log('Error loading real data:', error);
+                loadSampleData();
+            }
+        }
+
+        async function fetchMemberAccounts(parentAccountId) {
+            try {
+                // Query for member accounts where Parent Account = current account
+                const response = await ZOHO.CRM.API.searchRecord({
+                    Entity: "Accounts",
+                    Type: "criteria",
+                    Query: `(Parent_Account.id:equals:${parentAccountId})`
+                });
+
+                if (response.data) {
+                    for (const memberAccount of response.data) {
+                        await fetchAccountProducts(memberAccount.id, false, memberAccount.Account_Name);
+                    }
+                }
+            } catch (error) {
+                console.log('Error fetching member accounts:', error);
+            }
+        }
+
+        async function fetchAccountProducts(accountId, isMain, accountName) {
+            try {
+                // Fetch quotations for this account
+                const response = await ZOHO.CRM.API.searchRecord({
+                    Entity: "Quotations",
+                    Type: "criteria",
+                    Query: `(Account_Name.id:equals:${accountId})`
+                });
+
+                if (response.data) {
+                    const products = response.data.map(quot => ({
+                        accountId: accountId,
+                        accountName: accountName || (isMain ? mainAccountData.Account_Name : 'Unknown'),
+                        name: quot.Subject || 'Unnamed Product',
+                        proposal: quot.Proposal_Name || 'N/A',
+                        quotation: quot.Quote_Number || 'N/A',
+                        quantity: '1',
+                        value: '$' + (quot.Grand_Total || 0).toLocaleString(),
+                        period: quot.Period_Start_Date && quot.Period_End_Date 
+                            ? `${formatDate(quot.Period_Start_Date)} - ${formatDate(quot.Period_End_Date)}`
+                            : 'TBD',
+                        status: quot.Quote_Stage === 'Closed Won' ? 'active' : 'pending'
+                    }));
+
+                    if (isMain) {
+                        allProductsData.main = products;
+                    } else {
+                        allProductsData.members.push({
+                            accountId: accountId,
+                            accountName: accountName,
+                            products: products
+                        });
+                    }
+                }
+            } catch (error) {
+                console.log('Error fetching products for account:', accountId, error);
+            }
+        }
+
+        function loadSampleData() {
+            document.getElementById('main-account-name').textContent = 
+                'Account: ' + sampleData.mainAccount.name + ' (Demo Mode)';
             
-            var html = '';
-            var years = Object.keys(productsByYear).sort().reverse();
+            allProductsData.main = sampleData.mainAccount.products;
+            allProductsData.members = sampleData.memberAccounts.map(acc => ({
+                accountId: acc.id,
+                accountName: acc.name,
+                products: acc.products
+            }));
+
+            displayAll();
+        }
+
+        function changeView(view) {
+            currentView = view;
             
-            years.forEach(function(year) {
-                var products = productsByYear[year];
-                html += '<div class="year-section">';
-                html += '<div class="year-header">';
-                html += '<span>' + year + '</span>';
-                html += '<span class="year-count">' + products.length + ' product' + (products.length !== 1 ? 's' : '') + '</span>';
-                html += '</div>';
+            // Update button states
+            document.getElementById('btn-all').classList.toggle('active', view === 'all');
+            document.getElementById('btn-main').classList.toggle('active', view === 'main');
+            document.getElementById('btn-members').classList.toggle('active', view === 'members');
+
+            displayAll();
+        }
+
+        function displayAll() {
+            const container = document.getElementById('products-container');
+            let html = '';
+
+            // Display main account products
+            if (currentView === 'all' || currentView === 'main') {
+                if (allProductsData.main && allProductsData.main.length > 0) {
+                    html += `
+                        <div class="account-section">
+                            <div class="account-header">
+                                <span class="account-name">${mainAccountData ? mainAccountData.Account_Name : sampleData.mainAccount.name}</span>
+                                <span class="account-type">MAIN ACCOUNT</span>
+                            </div>
+                            ${renderProducts(allProductsData.main)}
+                        </div>
+                    `;
+                }
+            }
+
+            // Display member accounts products
+            if (currentView === 'all' || currentView === 'members') {
+                allProductsData.members.forEach(member => {
+                    if (member.products && member.products.length > 0) {
+                        html += `
+                            <div class="account-section">
+                                <div class="account-header">
+                                    <span class="account-name">${member.accountName}</span>
+                                    <span class="account-type member-badge">MEMBER ACCOUNT</span>
+                                </div>
+                                ${renderProducts(member.products)}
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            if (html === '') {
+                html = '<div class="no-data">No products found</div>';
+            }
+
+            container.innerHTML = html;
+            updateStats();
+        }
+
+        function renderProducts(products) {
+            return products.map(product => `
+                <div class="product">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-info">
+                        <div class="info-item">
+                            <span class="label">Proposal:</span>
+                            <span class="value">${product.proposal}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Quotation:</span>
+                            <span class="value">${product.quotation}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Quantity:</span>
+                            <span class="value">${product.quantity}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Value:</span>
+                            <span class="value">${product.value}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Period:</span>
+                            <span class="value">${product.period}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Status:</span>
+                            <span class="status status-${product.status}">${product.status}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            let totalProducts = 0;
+            let totalValue = 0;
+            let accountCount = 0;
+
+            if (currentView === 'all' || currentView === 'main') {
+                totalProducts += allProductsData.main.length;
+                if (allProductsData.main.length > 0) accountCount++;
+                allProductsData.main.forEach(p => {
+                    const val = parseInt(p.value.replace(/[$,]/g, ''));
+                    if (!isNaN(val)) totalValue += val;
+                });
+            }
+
+            if (currentView === 'all' || currentView === 'members') {
+                allProductsData.members.forEach(member => {
+                    totalProducts += member.products.length;
+                    if (member.products.length > 0) accountCount++;
+                    member.products.forEach(p => {
+                        const val = parseInt(p.value.replace(/[$,]/g, ''));
+                        if (!isNaN(val)) totalValue += val;
+                    });
+                });
+            }
+
+            document.getElementById('total-products').textContent = totalProducts;
+            document.getElementById('total-accounts').textContent = accountCount;
+            document.getElementById('total-value').textContent = '$' + totalValue.toLocaleString();
+        }
+
+        function setupSearch() {
+            document.getElementById('search').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const products = document.querySelectorAll('.product');
                 
                 products.forEach(function(product) {
-                    html += '<div class="product-card">';
-                    html += '<div class="product-header">';
-                    html += '<div class="product-name" onclick="openProduct(\'' + product.productId + '\')">' + product.productName + '</div>';
-                    if (product.productCode) {
-                        html += '<div class="product-code">' + product.productCode + '</div>';
+                    const text = product.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
                     }
-                    html += '</div>';
-                    
-                    html += '<div class="product-details">';
-                    html += '<div class="detail-item"><strong>🏢 Account:</strong> ' + product.accountName + '</div>';
-                    html += '<div class="detail-item"><strong>📅 Invoice Date:</strong> ' + (product.invoiceDate || '-') + '</div>';
-                    html += '<div class="detail-item"><strong>📄 Invoice No:</strong> ' + (product.invoiceNumber || '-') + '</div>';
-                    html += '<div class="detail-item"><strong>📋 Quotation:</strong> ' + product.quotationNumber + '</div>';
-                    if (product.dealName) {
-                        html += '<div class="detail-item"><strong>💼 Deal:</strong> ' + product.dealName + '</div>';
-                    }
-                    html += '</div>';
-                    
-                    html += '</div>';
                 });
-                
-                html += '</div>';
             });
-            
-            container.innerHTML = html;
         }
-        
-        function openProduct(productId) {
-            ZOHO.CRM.UI.Record.open({Entity:"Products", RecordID: productId});
+
+        function formatDate(dateString) {
+            try {
+                return new Date(dateString).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            } catch (error) {
+                return dateString;
+            }
         }
+
+        // Initialize on load
+        window.addEventListener('load', init);
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
