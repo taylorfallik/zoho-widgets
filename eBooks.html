@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eBooks</title>
+    <title>eBook Quotations</title>
     <script src="https://live.zwidgets.com/js-sdk/1.2/ZohoEmbededAppSDK.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -51,110 +51,147 @@
 </head>
 <body>
     <div class="header">
-        <h2>📚 eBooks</h2>
+        <h2>📚 eBook Quotations</h2>
         <div class="subtitle" id="accountName">Loading...</div>
     </div>
     <div id="stats-container"></div>
     <div id="filters-container"></div>
     <div id="quotations-container" class="loading">Loading eBook quotations</div>
     <script>
-        console.log('=== eBook Widget Started ===');
-        let allQuotations=[],filteredQuotations=[],parentAccountName='';
+        let allQuotations = [];
+        let filteredQuotations = [];
+        let parentAccountName = '';
         
-        if(typeof ZOHO==='undefined'){
-            console.error('ZOHO SDK not loaded');
-            document.getElementById("quotations-container").innerHTML='<div class="error">Widget must be loaded within Zoho CRM</div>';
-        }else{
-            console.log('ZOHO SDK loaded successfully');
-            ZOHO.embeddedApp.on("PageLoad",function(data){
-                console.log('PageLoad event triggered, Entity ID:', data.EntityId);
-                loadQuotations(data.EntityId);
+        if (typeof ZOHO === 'undefined') {
+            document.getElementById("quotations-container").innerHTML = '<div class="error">Widget must be loaded within Zoho CRM</div>';
+        } else {
+            ZOHO.embeddedApp.on("PageLoad", function(data) {
+                var accountId = data.EntityId;
+                loadQuotations(accountId);
             });
             ZOHO.embeddedApp.init();
         }
         
-        function loadQuotations(accountId){
-            console.log('Loading quotations for account:', accountId);
-            var container=document.getElementById("quotations-container");
-            var allQuots=[];
+        function loadQuotations(accountId) {
+            var container = document.getElementById("quotations-container");
+            var allQuots = [];
             
-            ZOHO.CRM.API.getRecord({Entity:"Accounts",RecordID:accountId}).then(function(r){
-                console.log('Account record retrieved:', r);
-                if(r.data&&r.data[0]){
-                    parentAccountName=r.data[0].Account_Name;
-                    document.getElementById("accountName").textContent=parentAccountName;
-                    console.log('Account name:', parentAccountName);
+            ZOHO.CRM.API.getRecord({
+                Entity: "Accounts",
+                RecordID: accountId
+            }).then(function(accountResponse) {
+                if (accountResponse.data && accountResponse.data[0]) {
+                    parentAccountName = accountResponse.data[0].Account_Name;
+                    document.getElementById("accountName").textContent = parentAccountName;
                 }
             });
             
-            ZOHO.CRM.API.getRelatedRecords({
-                Entity:"Accounts",
-                RecordID:accountId,
-                RelatedList:"Sales_Orders",
-                page:1,
-                per_page:200
-            }).then(function(response){
-                console.log('Quotations API response:', response);
-                if(!response.data||response.data.length===0){
-                    console.log('No quotations found in response');
-                    container.innerHTML='<div class="no-quotations">No quotations found</div>';
-                    return;
+            ZOHO.CRM.API.searchRecord({
+                Entity: "Accounts",
+                Type: "criteria",
+                Query: "(Parent_Account:equals:" + accountId + ")"
+            }).then(function(childResponse) {
+                var childAccountIds = [];
+                var accountMap = {};
+                
+                if (childResponse.data && childResponse.data.length > 0) {
+                    childAccountIds = childResponse.data.map(function(child) {
+                        accountMap[child.id] = { name: child.Account_Name, isParent: false };
+                        return child.id;
+                    });
                 }
-                console.log('Found', response.data.length, 'quotations');
-                response.data.forEach(function(quot){
-                    quot._isFromParent=true;
-                    quot._sourceAccountName=parentAccountName;
+                
+                accountMap[accountId] = { name: parentAccountName, isParent: true };
+                var accountIds = [accountId].concat(childAccountIds);
+                
+                var quotationPromises = accountIds.map(function(accId) {
+                    return ZOHO.CRM.API.getRelatedRecords({
+                        Entity: "Accounts",
+                        RecordID: accId,
+                        RelatedList: "Sales_Orders",
+                        page: 1,
+                        per_page: 200
+                    }).then(function(response) {
+                        if (response.data && response.data.length > 0) {
+                            response.data.forEach(function(quot) {
+                                quot._sourceAccountId = accId;
+                                quot._sourceAccountName = accountMap[accId].name;
+                                quot._isFromParent = accountMap[accId].isParent;
+                            });
+                            return response.data;
+                        }
+                        return [];
+                    }).catch(function() {
+                        return [];
+                    });
                 });
-                processQuotations(response.data);
-            }).catch(function(error){
-                console.error('Error loading quotations:', error);
-                container.innerHTML='<div class="error">Error loading quotations</div>';
+                
+                Promise.all(quotationPromises).then(function(quotationArrays) {
+                    quotationArrays.forEach(function(quotations) {
+                        allQuots = allQuots.concat(quotations);
+                    });
+                    
+                    if (allQuots.length === 0) {
+                        container.innerHTML = '<div class="no-quotations">No quotations found</div>';
+                        return;
+                    }
+                    
+                    processQuotations(allQuots);
+                });
+            }).catch(function(error) {
+                ZOHO.CRM.API.getRelatedRecords({
+                    Entity: "Accounts",
+                    RecordID: accountId,
+                    RelatedList: "Sales_Orders",
+                    page: 1,
+                    per_page: 200
+                }).then(function(response) {
+                    if (!response.data || response.data.length === 0) {
+                        container.innerHTML = '<div class="no-quotations">No quotations found</div>';
+                        return;
+                    }
+                    
+                    response.data.forEach(function(quot) {
+                        quot._isFromParent = true;
+                        quot._sourceAccountName = parentAccountName;
+                    });
+                    processQuotations(response.data);
+                }).catch(function(error) {
+                    container.innerHTML = '<div class="error">Error loading quotations</div>';
+                });
             });
         }
         
-        function processQuotations(quotations){
-            console.log('Processing', quotations.length, 'quotations');
-            var ebookQuotations=[];
+        function processQuotations(quotations) {
+            var ebookQuotations = [];
             
-            quotations.forEach(function(quot, index){
-                console.log('Quotation', index, ':', {
-                    subject: quot.Subject,
-                    status: quot.Status,
-                    includesEBooks: quot.Includes_eBooks,
-                    expirationDate: quot.eBook_expiration_date
-                });
-                
-                if(quot.Status==="Accepted"&&quot.Includes_eBooks===true){
-                    console.log('  ✓ Quotation matches criteria');
-                    var expirationDate=quot.eBook_expiration_date;
-                    var expirationStatus=getExpirationStatus(expirationDate);
-                    var daysRemaining=getDaysRemaining(expirationDate);
+            quotations.forEach(function(quot) {
+                if (quot.Status === "Accepted" && quot.Includes_eBooks === true) {
+                    var expirationDate = quot.eBook_expiration_date;
+                    var expirationStatus = getExpirationStatus(expirationDate);
+                    var daysRemaining = getDaysRemaining(expirationDate);
                     
                     ebookQuotations.push({
-                        quotationId:quot.id,
-                        quotationNumber:quot.Subject||quot.Quotation_Number||quot.Quote_Number||"No Number",
-                        expirationDate:expirationDate||"No Date Set",
-                        expirationStatus:expirationStatus,
-                        daysRemaining:daysRemaining,
-                        accountName:quot._sourceAccountName||(quot.Account_Name?quot.Account_Name.name:"Unknown"),
-                        isFromParent:quot._isFromParent!==undefined?quot._isFromParent:true,
-                        fulfillmentYear:quot.Fulfillment_Year||"",
-                        performanceStart:quot.Performance_Start_Date||"",
-                        performanceEnd:quot.Performance_End_Date||"",
-                        contactName:quot.Contact_Name?quot.Contact_Name.name:""
+                        quotationId: quot.id,
+                        quotationNumber: quot.Subject || quot.Quotation_Number || quot.Quote_Number || "No Number",
+                        expirationDate: expirationDate || "No Date Set",
+                        expirationStatus: expirationStatus,
+                        daysRemaining: daysRemaining,
+                        accountName: quot._sourceAccountName || (quot.Account_Name ? quot.Account_Name.name : "Unknown"),
+                        isFromParent: quot._isFromParent !== undefined ? quot._isFromParent : true,
+                        fulfillmentYear: quot.Fulfillment_Year || "",
+                        performanceStart: quot.Performance_Start_Date || "",
+                        performanceEnd: quot.Performance_End_Date || "",
+                        contactName: quot.Contact_Name ? quot.Contact_Name.name : ""
                     });
-                } else {
-                    console.log('  ✗ Quotation does NOT match criteria');
                 }
             });
             
-            console.log('Found', ebookQuotations.length, 'eBook quotations');
-            allQuotations=ebookQuotations;
-            filteredQuotations=ebookQuotations;
+            allQuotations = ebookQuotations;
+            filteredQuotations = ebookQuotations;
             
-            if(allQuotations.length===0){
-                console.log('No eBook quotations to display');
-                document.getElementById("quotations-container").innerHTML='<div class="no-quotations">No accepted quotations with eBooks found</div>';
+            if (allQuotations.length === 0) {
+                document.getElementById("quotations-container").innerHTML = '<div class="no-quotations">No accepted quotations with eBooks found</div>';
                 displayStats();
                 return;
             }
@@ -164,105 +201,148 @@
             displayStats();
         }
         
-        function getExpirationStatus(dateString){
-            if(!dateString)return'unknown';
-            var expDate=new Date(dateString);
-            var today=new Date();
-            var daysUntil=Math.ceil((expDate-today)/(1000*60*60*24));
-            if(daysUntil<0)return'expired';
-            if(daysUntil<=30)return'expiring';
-            return'active';
+        function getExpirationStatus(dateString) {
+            if (!dateString) return 'unknown';
+            var expDate = new Date(dateString);
+            var today = new Date();
+            var daysUntil = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
+            if (daysUntil < 0) return 'expired';
+            if (daysUntil <= 30) return 'expiring';
+            return 'active';
         }
         
-        function getDaysRemaining(dateString){
-            if(!dateString)return null;
-            var expDate=new Date(dateString);
-            var today=new Date();
-            return Math.ceil((expDate-today)/(1000*60*60*24));
+        function getDaysRemaining(dateString) {
+            if (!dateString) return null;
+            var expDate = new Date(dateString);
+            var today = new Date();
+            return Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
         }
         
-        function formatDate(dateString){
-            if(!dateString)return"No Date Set";
-            try{return new Date(dateString).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});}catch(error){return dateString;}
+        function formatDate(dateString) {
+            if (!dateString) return "No Date Set";
+            try {
+                return new Date(dateString).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } catch (error) {
+                return dateString;
+            }
         }
         
-        function displayStats(){
-            var total=filteredQuotations.length;
-            var active=filteredQuotations.filter(q=>q.expirationStatus==='active').length;
-            var expiring=filteredQuotations.filter(q=>q.expirationStatus==='expiring').length;
-            var expired=filteredQuotations.filter(q=>q.expirationStatus==='expired').length;
-            var statsHTML='<div class="stats-bar">';
-            statsHTML+='<div class="stat-item"><div class="stat-value">'+total+'</div><div class="stat-label">Total eBook Quotations</div></div>';
-            statsHTML+='<div class="stat-item"><div class="stat-value" style="color: #155724;">'+active+'</div><div class="stat-label">Active</div></div>';
-            statsHTML+='<div class="stat-item"><div class="stat-value" style="color: #856404;">'+expiring+'</div><div class="stat-label">Expiring Soon</div></div>';
-            statsHTML+='<div class="stat-item"><div class="stat-value" style="color: #721c24;">'+expired+'</div><div class="stat-label">Expired</div></div>';
-            statsHTML+='</div>';
-            document.getElementById("stats-container").innerHTML=statsHTML;
+        function displayStats() {
+            var total = filteredQuotations.length;
+            var active = filteredQuotations.filter(q => q.expirationStatus === 'active').length;
+            var expiring = filteredQuotations.filter(q => q.expirationStatus === 'expiring').length;
+            var expired = filteredQuotations.filter(q => q.expirationStatus === 'expired').length;
+            
+            var statsHTML = '<div class="stats-bar">';
+            statsHTML += '<div class="stat-item"><div class="stat-value">' + total + '</div><div class="stat-label">Total eBook Quotations</div></div>';
+            statsHTML += '<div class="stat-item"><div class="stat-value" style="color: #155724;">' + active + '</div><div class="stat-label">Active</div></div>';
+            statsHTML += '<div class="stat-item"><div class="stat-value" style="color: #856404;">' + expiring + '</div><div class="stat-label">Expiring Soon</div></div>';
+            statsHTML += '<div class="stat-item"><div class="stat-value" style="color: #721c24;">' + expired + '</div><div class="stat-label">Expired</div></div>';
+            statsHTML += '</div>';
+            
+            document.getElementById("stats-container").innerHTML = statsHTML;
         }
         
-        function createFilters(){
-            var accounts=[...new Set(allQuotations.map(q=>q.accountName))].sort();
-            var years=[...new Set(allQuotations.map(q=>q.fulfillmentYear).filter(y=>y))].sort().reverse();
-            var filtersHTML='<div class="filters">';
-            filtersHTML+='<div class="filter-group"><label>Status</label><select id="statusFilter" onchange="applyFilters()"><option value="">All Statuses</option><option value="active">Active</option><option value="expiring">Expiring Soon (30 days)</option><option value="expired">Expired</option></select></div>';
-            filtersHTML+='<div class="filter-group"><label>Account</label><select id="accountFilter" onchange="applyFilters()"><option value="">All Accounts</option>';
-            accounts.forEach(function(name){filtersHTML+='<option value="'+name+'">'+name+'</option>';});
-            filtersHTML+='</select></div>';
-            if(years.length>0){filtersHTML+='<div class="filter-group"><label>Fulfillment Year</label><select id="yearFilter" onchange="applyFilters()"><option value="">All Years</option>';years.forEach(function(year){filtersHTML+='<option value="'+year+'">'+year+'</option>';});filtersHTML+='</select></div>';}
-            filtersHTML+='<div class="filter-group"><label>Search</label><input type="text" id="searchFilter" placeholder="Quotation number..." onkeyup="applyFilters()"></div></div>';
-            document.getElementById("filters-container").innerHTML=filtersHTML;
-        }
-        
-        function applyFilters(){
-            var statusFilter=document.getElementById("statusFilter")?document.getElementById("statusFilter").value:"";
-            var accountFilter=document.getElementById("accountFilter")?document.getElementById("accountFilter").value:"";
-            var yearFilter=document.getElementById("yearFilter")?document.getElementById("yearFilter").value:"";
-            var searchFilter=document.getElementById("searchFilter")?document.getElementById("searchFilter").value.toLowerCase():"";
-            filteredQuotations=allQuotations.filter(function(quot){
-                var matchStatus=!statusFilter||quot.expirationStatus===statusFilter;
-                var matchAccount=!accountFilter||quot.accountName===accountFilter;
-                var matchYear=!yearFilter||quot.fulfillmentYear===yearFilter;
-                var matchSearch=!searchFilter||quot.quotationNumber.toLowerCase().includes(searchFilter);
-                return matchStatus&&matchAccount&&matchYear&&matchSearch;
+        function createFilters() {
+            var accounts = [...new Set(allQuotations.map(q => q.accountName))].sort();
+            var years = [...new Set(allQuotations.map(q => q.fulfillmentYear).filter(y => y))].sort().reverse();
+            
+            var filtersHTML = '<div class="filters">';
+            filtersHTML += '<div class="filter-group"><label>Status</label><select id="statusFilter" onchange="applyFilters()"><option value="">All Statuses</option><option value="active">Active</option><option value="expiring">Expiring Soon (30 days)</option><option value="expired">Expired</option></select></div>';
+            filtersHTML += '<div class="filter-group"><label>Account</label><select id="accountFilter" onchange="applyFilters()"><option value="">All Accounts</option>';
+            accounts.forEach(function(name) {
+                filtersHTML += '<option value="' + name + '">' + name + '</option>';
             });
+            filtersHTML += '</select></div>';
+            
+            if (years.length > 0) {
+                filtersHTML += '<div class="filter-group"><label>Fulfillment Year</label><select id="yearFilter" onchange="applyFilters()"><option value="">All Years</option>';
+                years.forEach(function(year) {
+                    filtersHTML += '<option value="' + year + '">' + year + '</option>';
+                });
+                filtersHTML += '</select></div>';
+            }
+            
+            filtersHTML += '<div class="filter-group"><label>Search</label><input type="text" id="searchFilter" placeholder="Quotation number..." onkeyup="applyFilters()"></div></div>';
+            document.getElementById("filters-container").innerHTML = filtersHTML;
+        }
+        
+        function applyFilters() {
+            var statusFilter = document.getElementById("statusFilter") ? document.getElementById("statusFilter").value : "";
+            var accountFilter = document.getElementById("accountFilter") ? document.getElementById("accountFilter").value : "";
+            var yearFilter = document.getElementById("yearFilter") ? document.getElementById("yearFilter").value : "";
+            var searchFilter = document.getElementById("searchFilter") ? document.getElementById("searchFilter").value.toLowerCase() : "";
+            
+            filteredQuotations = allQuotations.filter(function(quot) {
+                var matchStatus = !statusFilter || quot.expirationStatus === statusFilter;
+                var matchAccount = !accountFilter || quot.accountName === accountFilter;
+                var matchYear = !yearFilter || quot.fulfillmentYear === yearFilter;
+                var matchSearch = !searchFilter || quot.quotationNumber.toLowerCase().includes(searchFilter);
+                return matchStatus && matchAccount && matchYear && matchSearch;
+            });
+            
             displayQuotations();
             displayStats();
         }
         
-        function displayQuotations(){
-            var container=document.getElementById("quotations-container");
-            if(filteredQuotations.length===0){container.innerHTML='<div class="no-quotations">No quotations match your filters</div>';return;}
-            var activeQuots=filteredQuotations.filter(q=>q.expirationStatus==='active');
-            var expiringQuots=filteredQuotations.filter(q=>q.expirationStatus==='expiring');
-            var expiredQuots=filteredQuotations.filter(q=>q.expirationStatus==='expired');
-            var html='';
-            if(activeQuots.length>0){html+='<div class="status-section"><div class="status-header active"><span>✅ Active eBooks</span><span class="status-count">'+activeQuots.length+' quotation'+(activeQuots.length!==1?'s':'')+'</span></div>';html+=renderQuotations(activeQuots)+'</div>';}
-            if(expiringQuots.length>0){html+='<div class="status-section"><div class="status-header expiring"><span>⚠️ Expiring Soon (within 30 days)</span><span class="status-count">'+expiringQuots.length+' quotation'+(expiringQuots.length!==1?'s':'')+'</span></div>';html+=renderQuotations(expiringQuots)+'</div>';}
-            if(expiredQuots.length>0){html+='<div class="status-section"><div class="status-header expired"><span>❌ Expired eBooks</span><span class="status-count">'+expiredQuots.length+' quotation'+(expiredQuots.length!==1?'s':'')+'</span></div>';html+=renderQuotations(expiredQuots)+'</div>';}
-            container.innerHTML=html;
+        function displayQuotations() {
+            var container = document.getElementById("quotations-container");
+            if (filteredQuotations.length === 0) {
+                container.innerHTML = '<div class="no-quotations">No quotations match your filters</div>';
+                return;
+            }
+            
+            var activeQuots = filteredQuotations.filter(q => q.expirationStatus === 'active');
+            var expiringQuots = filteredQuotations.filter(q => q.expirationStatus === 'expiring');
+            var expiredQuots = filteredQuotations.filter(q => q.expirationStatus === 'expired');
+            var html = '';
+            
+            if (activeQuots.length > 0) {
+                html += '<div class="status-section"><div class="status-header active"><span>✅ Active eBooks</span><span class="status-count">' + activeQuots.length + ' quotation' + (activeQuots.length !== 1 ? 's' : '') + '</span></div>';
+                html += renderQuotations(activeQuots) + '</div>';
+            }
+            
+            if (expiringQuots.length > 0) {
+                html += '<div class="status-section"><div class="status-header expiring"><span>⚠️ Expiring Soon (within 30 days)</span><span class="status-count">' + expiringQuots.length + ' quotation' + (expiringQuots.length !== 1 ? 's' : '') + '</span></div>';
+                html += renderQuotations(expiringQuots) + '</div>';
+            }
+            
+            if (expiredQuots.length > 0) {
+                html += '<div class="status-section"><div class="status-header expired"><span>❌ Expired eBooks</span><span class="status-count">' + expiredQuots.length + ' quotation' + (expiredQuots.length !== 1 ? 's' : '') + '</span></div>';
+                html += renderQuotations(expiredQuots) + '</div>';
+            }
+            
+            container.innerHTML = html;
         }
         
-        function renderQuotations(quotations){
-            var html='';
-            quotations.forEach(function(quot){
-                html+='<div class="quotation-card"><div class="quotation-header"><div class="quotation-number" onclick="openQuotation(\''+quot.quotationId+'\')">'+quot.quotationNumber+'</div>';
-                var badgeClass=quot.isFromParent?'account-badge':'account-badge member';
-                var badgeText=quot.isFromParent?'PARENT':'MEMBER';
-                html+='<div class="'+badgeClass+'">'+badgeText+'</div></div><div class="quotation-details">';
-                html+='<div class="detail-item"><div class="detail-label">📚 eBook Expiration Date</div><div class="detail-value expiration-date '+quot.expirationStatus+'">'+formatDate(quot.expirationDate)+'</div>';
-                if(quot.daysRemaining!==null){var daysText=quot.daysRemaining>=0?quot.daysRemaining+' days remaining':Math.abs(quot.daysRemaining)+' days overdue';html+='<div class="days-remaining">'+daysText+'</div>';}
-                html+='</div>';
-                html+='<div class="detail-item"><div class="detail-label">🏢 Account</div><div class="detail-value">'+quot.accountName+'</div></div>';
-                if(quot.fulfillmentYear)html+='<div class="detail-item"><div class="detail-label">📅 Fulfillment Year</div><div class="detail-value">'+quot.fulfillmentYear+'</div></div>';
-                if(quot.performanceStart&&quot.performanceEnd)html+='<div class="detail-item"><div class="detail-label">⏱️ Performance Period</div><div class="detail-value">'+formatDate(quot.performanceStart)+' - '+formatDate(quot.performanceEnd)+'</div></div>';
-                if(quot.contactName)html+='<div class="detail-item"><div class="detail-label">👤 Contact</div><div class="detail-value">'+quot.contactName+'</div></div>';
-                html+='</div></div>';
+        function renderQuotations(quotations) {
+            var html = '';
+            quotations.forEach(function(quot) {
+                html += '<div class="quotation-card"><div class="quotation-header"><div class="quotation-number" onclick="openQuotation(\'' + quot.quotationId + '\')">' + quot.quotationNumber + '</div>';
+                var badgeClass = quot.isFromParent ? 'account-badge' : 'account-badge member';
+                var badgeText = quot.isFromParent ? 'PARENT' : 'MEMBER';
+                html += '<div class="' + badgeClass + '">' + badgeText + '</div></div><div class="quotation-details">';
+                html += '<div class="detail-item"><div class="detail-label">📚 eBook Expiration Date</div><div class="detail-value expiration-date ' + quot.expirationStatus + '">' + formatDate(quot.expirationDate) + '</div>';
+                if (quot.daysRemaining !== null) {
+                    var daysText = quot.daysRemaining >= 0 ? quot.daysRemaining + ' days remaining' : Math.abs(quot.daysRemaining) + ' days overdue';
+                    html += '<div class="days-remaining">' + daysText + '</div>';
+                }
+                html += '</div>';
+                html += '<div class="detail-item"><div class="detail-label">🏢 Account</div><div class="detail-value">' + quot.accountName + '</div></div>';
+                if (quot.fulfillmentYear) html += '<div class="detail-item"><div class="detail-label">📅 Fulfillment Year</div><div class="detail-value">' + quot.fulfillmentYear + '</div></div>';
+                if (quot.performanceStart && quot.performanceEnd) html += '<div class="detail-item"><div class="detail-label">⏱️ Performance Period</div><div class="detail-value">' + formatDate(quot.performanceStart) + ' - ' + formatDate(quot.performanceEnd) + '</div></div>';
+                if (quot.contactName) html += '<div class="detail-item"><div class="detail-label">👤 Contact</div><div class="detail-value">' + quot.contactName + '</div></div>';
+                html += '</div></div>';
             });
             return html;
         }
         
-        function openQuotation(quotationId){
-            ZOHO.CRM.UI.Record.open({Entity:"Quotes",RecordID:quotationId});
+        function openQuotation(quotationId) {
+            ZOHO.CRM.UI.Record.open({Entity: "Quotes", RecordID: quotationId});
         }
     </script>
 </body>
