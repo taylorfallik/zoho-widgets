@@ -350,13 +350,14 @@
             var quotationMap = {};
             
             quotations.forEach(function(quot) {
-                // Only include accepted quotations that have eBooks
-                if (quot.Status === "Accepted" && quot.Includes_eBooks === true) {
+                // SIMPLIFIED: Only check if Includes_eBooks is true - ignore status
+                if (quot.Includes_eBooks === true) {
                     var quotationDate = quot.Quotation_Date || quot.Created_Time || "";
                     var expirationDate = quot.eBook_expiration_date || "";
                     var quotationNumber = quot.Subject || quot.Quotation_Number || quot.Quote_Number || "";
                     var accountName = quot.Account_Name ? quot.Account_Name.name : "Unknown Account";
                     var accountId = quot.Account_Name ? quot.Account_Name.id : "";
+                    var status = quot.Status || "Unknown";
                     
                     var expirationStatus = getExpirationStatus(expirationDate);
                     var daysRemaining = getDaysRemaining(expirationDate);
@@ -371,6 +372,7 @@
                             expirationDate: expirationDate,
                             expirationStatus: expirationStatus,
                             daysRemaining: daysRemaining,
+                            status: status,
                             accountName: accountName,
                             accountId: accountId,
                             fulfillmentYear: quot.Fulfillment_Year || "",
@@ -387,7 +389,7 @@
             filteredQuotations = allQuotations;
             
             if (allQuotations.length === 0) {
-                document.getElementById("quotations-container").innerHTML = '<div class="no-quotations">No accepted quotations with eBooks found</div>';
+                document.getElementById("quotations-container").innerHTML = '<div class="no-quotations">No quotations with eBooks found</div>';
                 return;
             }
             
@@ -404,7 +406,7 @@
             var daysUntil = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
             
             if (daysUntil < 0) return 'expired';
-            if (daysUntil <= 30) return 'expiring'; // Expiring within 30 days
+            if (daysUntil <= 30) return 'expiring';
             return 'active';
         }
         
@@ -451,17 +453,28 @@
         function createFilters() {
             var years = [...new Set(allQuotations.map(q => q.year))].sort().reverse();
             var accounts = [...new Set(allQuotations.map(q => q.accountName))].sort();
+            var statuses = [...new Set(allQuotations.map(q => q.status))].sort();
             
             var filtersHTML = '<div class="filters">';
             
-            // Status filter
+            // Expiration Status filter
             filtersHTML += '<div class="filter-group">';
-            filtersHTML += '<label>Status</label>';
-            filtersHTML += '<select id="statusFilter" onchange="applyFilters()">';
-            filtersHTML += '<option value="">All Statuses</option>';
+            filtersHTML += '<label>Expiration</label>';
+            filtersHTML += '<select id="expirationFilter" onchange="applyFilters()">';
+            filtersHTML += '<option value="">All</option>';
             filtersHTML += '<option value="active">Active</option>';
             filtersHTML += '<option value="expiring">Expiring Soon (30 days)</option>';
             filtersHTML += '<option value="expired">Expired</option>';
+            filtersHTML += '</select></div>';
+            
+            // Quotation Status filter
+            filtersHTML += '<div class="filter-group">';
+            filtersHTML += '<label>Quotation Status</label>';
+            filtersHTML += '<select id="statusFilter" onchange="applyFilters()">';
+            filtersHTML += '<option value="">All Statuses</option>';
+            statuses.forEach(function(status) {
+                filtersHTML += '<option value="' + status + '">' + status + '</option>';
+            });
             filtersHTML += '</select></div>';
             
             // Year filter
@@ -496,20 +509,22 @@
         }
         
         function applyFilters() {
+            var expirationFilter = document.getElementById("expirationFilter").value;
             var statusFilter = document.getElementById("statusFilter").value;
             var yearFilter = document.getElementById("yearFilter").value;
             var accountFilter = document.getElementById("accountFilter").value;
             var searchFilter = document.getElementById("searchFilter").value.toLowerCase();
             
             filteredQuotations = allQuotations.filter(function(quot) {
-                var matchStatus = !statusFilter || quot.expirationStatus === statusFilter;
+                var matchExpiration = !expirationFilter || quot.expirationStatus === expirationFilter;
+                var matchStatus = !statusFilter || quot.status === statusFilter;
                 var matchYear = !yearFilter || quot.year === yearFilter;
                 var matchAccount = !accountFilter || quot.accountName === accountFilter;
                 var matchSearch = !searchFilter || 
                     quot.quotationNumber.toLowerCase().includes(searchFilter) ||
                     quot.accountName.toLowerCase().includes(searchFilter);
                 
-                return matchStatus && matchYear && matchAccount && matchSearch;
+                return matchExpiration && matchStatus && matchYear && matchAccount && matchSearch;
             });
             
             displayQuotations();
@@ -559,6 +574,7 @@
                     html += '</div>';
                     
                     html += '<div class="quotation-details">';
+                    html += '<div class="detail-item"><strong>📋 Status:</strong> ' + quot.status + '</div>';
                     html += '<div class="detail-item"><strong>🏢 Account:</strong> ' + quot.accountName + '</div>';
                     html += '<div class="detail-item"><strong>📅 Quotation Date:</strong> ' + formatDate(quot.quotationDate) + '</div>';
                     if (quot.fulfillmentYear) {
