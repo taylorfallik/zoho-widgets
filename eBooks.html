@@ -1,0 +1,689 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.3">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;eBook Quotations&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://live.zwidgets.com/js-sdk/1.2/ZohoEmbededAppSDK.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>* {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #333;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.header {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.header h2 {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 24px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.header .subtitle {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0.9;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.stats-bar {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #f8f9fa;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.stat-item {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.stat-value {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 28px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #667eea;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.stat-label {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #666;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.filters {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #f8f9fa;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.filter-group {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.filter-group label {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #555;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.filter-group select, .filter-group input {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 8px 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #ddd;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.status-section {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.status-header {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #2c3e50;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: space-between;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.status-header.active {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #d4edda;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #155724;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.status-header.expiring {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #fff3cd;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #856404;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.status-header.expired {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #f8d7da;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #721c24;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.status-count {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255,255,255,0.5);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 4px 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.quotation-card {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid #e9ecef;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 2px 4px rgba(0,0,0,0.05);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: transform 0.2s, box-shadow 0.2s;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.quotation-card:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-2px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 8px rgba(0,0,0,0.1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-color: #667eea;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.quotation-header {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: space-between;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding-bottom: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 2px solid #f0f0f0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.quotation-number {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #2c3e50;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.quotation-number:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #667eea;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.account-badge {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 11px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #667eea;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 4px 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.account-badge.member {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #9b59b6;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.quotation-details {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.detail-item {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.detail-label {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 11px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #666;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.detail-value {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #2c3e50;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.expiration-date {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 18px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.expiration-date.active {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #155724;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.expiration-date.expiring {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #856404;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.expiration-date.expired {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #721c24;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.days-remaining {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 3px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.no-quotations {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 60px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #95a5a6;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-style: italic;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.no-quotations:before {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: "📚";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 48px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.loading {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 60px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #7f8c8d;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.loading:after {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: "...";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: dots 1.5s steps(4, end) infinite;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes dots {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0%, 20% { content: "."; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>40% { content: ".."; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>60%, 100% { content: "..."; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.error {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 40px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #e74c3c;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #fadbd8;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;📚 eBook Quotations&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="subtitle" id="accountName"&gt;Loading...&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="stats-container"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="filters-container"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="quotations-container" class="loading"&gt;Loading eBook quotations&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let allQuotations = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let filteredQuotations = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let parentAccountName = '';</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Wait for ZOHO to be ready</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (typeof ZOHO === 'undefined') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById("quotations-container").innerHTML = '&lt;div class="error"&gt;Widget must be loaded within Zoho CRM&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ZOHO.embeddedApp.on("PageLoad", function(data) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var accountId = data.EntityId;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>loadQuotations(accountId);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>ZOHO.embeddedApp.init();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function loadQuotations(accountId) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var container = document.getElementById("quotations-container");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var allQuots = [];</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Get parent account name</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ZOHO.CRM.API.getRecord({</p>
+<p class="p1"><span class="Apple-converted-space">                </span>Entity: "Accounts",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>RecordID: accountId</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}).then(function(accountResponse) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (accountResponse.data &amp;&amp; accountResponse.data[0]) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>parentAccountName = accountResponse.data[0].Account_Name;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById("accountName").textContent = parentAccountName;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Get child accounts</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ZOHO.CRM.API.searchRecord({</p>
+<p class="p1"><span class="Apple-converted-space">                </span>Entity: "Accounts",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>Type: "criteria",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>Query: "(Parent_Account:equals:" + accountId + ")"</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}).then(function(childResponse) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var childAccountIds = [];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var accountMap = {};</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (childResponse.data &amp;&amp; childResponse.data.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>childAccountIds = childResponse.data.map(function(child) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>accountMap[child.id] = { name: child.Account_Name, isParent: false };</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>return child.id;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Mark parent account</p>
+<p class="p1"><span class="Apple-converted-space">                </span>accountMap[accountId] = { name: parentAccountName, isParent: true };</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Add the parent account ID to the list</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var accountIds = [accountId].concat(childAccountIds);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Get quotations for parent and all child accounts</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var quotationPromises = accountIds.map(function(accId) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>return ZOHO.CRM.API.getRelatedRecords({</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>Entity: "Accounts",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>RecordID: accId,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>RelatedList: "Quotations",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>page: 1,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>per_page: 200</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}).then(function(response) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>if (response.data &amp;&amp; response.data.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>// Tag each quotation with its source account</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>response.data.forEach(function(quot) {</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>quot._sourceAccountId = accId;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>quot._sourceAccountName = accountMap[accId].name;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>quot._isFromParent = accountMap[accId].isParent;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>return response.data;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>return [];</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}).catch(function() {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>return [];</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>Promise.all(quotationPromises).then(function(quotationArrays) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Flatten all quotations into one array</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>quotationArrays.forEach(function(quotations) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>allQuots = allQuots.concat(quotations);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (allQuots.length === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>container.innerHTML = '&lt;div class="no-quotations"&gt;No quotations found for this account or its member accounts&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>processQuotations(allQuots);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}).catch(function(error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// If child search fails, just get parent quotations</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ZOHO.CRM.API.getRelatedRecords({</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>Entity: "Accounts",</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>RecordID: accountId,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>RelatedList: "Quotations",</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>page: 1,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>per_page: 200</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}).then(function(response) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (!response.data || response.data.length === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>container.innerHTML = '&lt;div class="no-quotations"&gt;No quotations found for this account&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Tag parent quotations</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>response.data.forEach(function(quot) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>quot._isFromParent = true;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>quot._sourceAccountName = parentAccountName;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>processQuotations(response.data);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}).catch(function(error) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>container.innerHTML = '&lt;div class="error"&gt;Error loading quotations. Please try again.&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function processQuotations(quotations) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var ebookQuotations = [];</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>quotations.forEach(function(quot) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Only include accepted quotations that have eBooks</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (quot.Status === "Accepted" &amp;&amp; quot.Includes_eBooks === true) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>var expirationDate = quot.eBook_expiration_date;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>var expirationStatus = getExpirationStatus(expirationDate);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>var daysRemaining = getDaysRemaining(expirationDate);</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ebookQuotations.push({</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>quotationId: quot.id,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>quotationNumber: quot.Subject || quot.Quotation_Number || quot.Quote_Number || "No Number",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>expirationDate: expirationDate || "No Date Set",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>expirationStatus: expirationStatus,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>daysRemaining: daysRemaining,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>accountName: quot._sourceAccountName || (quot.Account_Name ? quot.Account_Name.name : "Unknown"),</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>isFromParent: quot._isFromParent !== undefined ? quot._isFromParent : true,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>fulfillmentYear: quot.Fulfillment_Year || "",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>performanceStart: quot.Performance_Start_Date || "",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>performanceEnd: quot.Performance_End_Date || "",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>contactName: quot.Contact_Name ? quot.Contact_Name.name : ""</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>allQuotations = ebookQuotations;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filteredQuotations = ebookQuotations;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (allQuotations.length === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById("quotations-container").innerHTML = '&lt;div class="no-quotations"&gt;No accepted quotations with eBooks found&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>displayStats();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>displayQuotations();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>createFilters();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>displayStats();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function getExpirationStatus(dateString) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!dateString) return 'unknown';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>var expDate = new Date(dateString);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var today = new Date();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var daysUntil = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (daysUntil &lt; 0) return 'expired';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (daysUntil &lt;= 30) return 'expiring';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return 'active';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function getDaysRemaining(dateString) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!dateString) return null;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>var expDate = new Date(dateString);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var today = new Date();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var daysUntil = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>return daysUntil;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function formatDate(dateString) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!dateString) return "No Date Set";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return new Date(dateString).toLocaleDateString('en-US', {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>year: 'numeric',</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>month: 'long',</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>day: 'numeric'</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return dateString;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function displayStats() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var total = filteredQuotations.length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var active = filteredQuotations.filter(q =&gt; q.expirationStatus === 'active').length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var expiring = filteredQuotations.filter(q =&gt; q.expirationStatus === 'expiring').length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var expired = filteredQuotations.filter(q =&gt; q.expirationStatus === 'expired').length;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>var statsHTML = '&lt;div class="stats-bar"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>statsHTML += '&lt;div class="stat-item"&gt;&lt;div class="stat-value"&gt;' + total + '&lt;/div&gt;&lt;div class="stat-label"&gt;Total eBook Quotations&lt;/div&gt;&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>statsHTML += '&lt;div class="stat-item"&gt;&lt;div class="stat-value" style="color: #155724;"&gt;' + active + '&lt;/div&gt;&lt;div class="stat-label"&gt;Active&lt;/div&gt;&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>statsHTML += '&lt;div class="stat-item"&gt;&lt;div class="stat-value" style="color: #856404;"&gt;' + expiring + '&lt;/div&gt;&lt;div class="stat-label"&gt;Expiring Soon&lt;/div&gt;&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>statsHTML += '&lt;div class="stat-item"&gt;&lt;div class="stat-value" style="color: #721c24;"&gt;' + expired + '&lt;/div&gt;&lt;div class="stat-label"&gt;Expired&lt;/div&gt;&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>statsHTML += '&lt;/div&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById("stats-container").innerHTML = statsHTML;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function createFilters() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var accounts = [...new Set(allQuotations.map(q =&gt; q.accountName))].sort();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var years = [...new Set(allQuotations.map(q =&gt; q.fulfillmentYear).filter(y =&gt; y))].sort().reverse();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>var filtersHTML = '&lt;div class="filters"&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;div class="filter-group"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;label&gt;Status&lt;/label&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;select id="statusFilter" onchange="applyFilters()"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;option value=""&gt;All Statuses&lt;/option&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;option value="active"&gt;Active&lt;/option&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;option value="expiring"&gt;Expiring Soon (30 days)&lt;/option&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;option value="expired"&gt;Expired&lt;/option&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;/select&gt;&lt;/div&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;div class="filter-group"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;label&gt;Account&lt;/label&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;select id="accountFilter" onchange="applyFilters()"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;option value=""&gt;All Accounts&lt;/option&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>accounts.forEach(function(name) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>filtersHTML += '&lt;option value="' + name + '"&gt;' + name + '&lt;/option&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;/select&gt;&lt;/div&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (years.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>filtersHTML += '&lt;div class="filter-group"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>filtersHTML += '&lt;label&gt;Fulfillment Year&lt;/label&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>filtersHTML += '&lt;select id="yearFilter" onchange="applyFilters()"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>filtersHTML += '&lt;option value=""&gt;All Years&lt;/option&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>years.forEach(function(year) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>filtersHTML += '&lt;option value="' + year + '"&gt;' + year + '&lt;/option&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                </span>filtersHTML += '&lt;/select&gt;&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;div class="filter-group"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;label&gt;Search&lt;/label&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;input type="text" id="searchFilter" placeholder="Quotation number..." onkeyup="applyFilters()"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;/div&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>filtersHTML += '&lt;/div&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById("filters-container").innerHTML = filtersHTML;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function applyFilters() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var statusFilter = document.getElementById("statusFilter") ? document.getElementById("statusFilter").value : "";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var accountFilter = document.getElementById("accountFilter") ? document.getElementById("accountFilter").value : "";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var yearFilter = document.getElementById("yearFilter") ? document.getElementById("yearFilter").value : "";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var searchFilter = document.getElementById("searchFilter") ? document.getElementById("searchFilter").value.toLowerCase() : "";</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>filteredQuotations = allQuotations.filter(function(quot) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var matchStatus = !statusFilter || quot.expirationStatus === statusFilter;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var matchAccount = !accountFilter || quot.accountName === accountFilter;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var matchYear = !yearFilter || quot.fulfillmentYear === yearFilter;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var matchSearch = !searchFilter || quot.quotationNumber.toLowerCase().includes(searchFilter);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>return matchStatus &amp;&amp; matchAccount &amp;&amp; matchYear &amp;&amp; matchSearch;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>displayQuotations();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>displayStats();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function displayQuotations() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var container = document.getElementById("quotations-container");</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (filteredQuotations.length === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>container.innerHTML = '&lt;div class="no-quotations"&gt;No quotations match your filters&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>var activeQuots = filteredQuotations.filter(q =&gt; q.expirationStatus === 'active');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var expiringQuots = filteredQuotations.filter(q =&gt; q.expirationStatus === 'expiring');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var expiredQuots = filteredQuotations.filter(q =&gt; q.expirationStatus === 'expired');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>var html = '';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (activeQuots.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="status-section"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="status-header active"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;span&gt;✅ Active eBooks&lt;/span&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;span class="status-count"&gt;' + activeQuots.length + ' quotation' + (activeQuots.length !== 1 ? 's' : '') + '&lt;/span&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += renderQuotations(activeQuots);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (expiringQuots.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="status-section"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="status-header expiring"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;span&gt;⚠️ Expiring Soon (within 30 days)&lt;/span&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;span class="status-count"&gt;' + expiringQuots.length + ' quotation' + (expiringQuots.length !== 1 ? 's' : '') + '&lt;/span&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += renderQuotations(expiringQuots);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (expiredQuots.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="status-section"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="status-header expired"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;span&gt;❌ Expired eBooks&lt;/span&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;span class="status-count"&gt;' + expiredQuots.length + ' quotation' + (expiredQuots.length !== 1 ? 's' : '') + '&lt;/span&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += renderQuotations(expiredQuots);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>container.innerHTML = html;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderQuotations(quotations) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var html = '';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>quotations.forEach(function(quot) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="quotation-card"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="quotation-header"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="quotation-number" onclick="openQuotation(\'' + quot.quotationId + '\')"&gt;' + quot.quotationNumber + '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var badgeClass = quot.isFromParent ? 'account-badge' : 'account-badge member';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var badgeText = quot.isFromParent ? 'PARENT' : 'MEMBER';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="' + badgeClass + '"&gt;' + badgeText + '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/div&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="quotation-details"&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="detail-item"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="detail-label"&gt;📚 eBook Expiration Date&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="detail-value expiration-date ' + quot.expirationStatus + '"&gt;' + formatDate(quot.expirationDate) + '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (quot.daysRemaining !== null) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>var daysText = quot.daysRemaining &gt;= 0<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                        </span>? quot.daysRemaining + ' days remaining'</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>: Math.abs(quot.daysRemaining) + ' days overdue';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;div class="days-remaining"&gt;' + daysText + '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/div&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="detail-item"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="detail-label"&gt;🏢 Account&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;div class="detail-value"&gt;' + quot.accountName + '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/div&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (quot.fulfillmentYear) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;div class="detail-item"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;div class="detail-label"&gt;📅 Fulfillment Year&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;div class="detail-value"&gt;' + quot.fulfillmentYear + '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (quot.performanceStart &amp;&amp; quot.performanceEnd) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;div class="detail-item"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;div class="detail-label"&gt;⏱️ Performance Period&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;div class="detail-value"&gt;' + formatDate(quot.performanceStart) + ' - ' + formatDate(quot.performanceEnd) + '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (quot.contactName) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;div class="detail-item"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;div class="detail-label"&gt;👤 Contact&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;div class="detail-value"&gt;' + quot.contactName + '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>html += '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/div&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>return html;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function openQuotation(quotationId) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ZOHO.CRM.UI.Record.open({Entity:"Quotes", RecordID: quotationId});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
