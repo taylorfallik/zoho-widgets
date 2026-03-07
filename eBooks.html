@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eBook Quotations</title>
+    <title>eBooks</title>
     <script src="https://live.zwidgets.com/js-sdk/1.2/ZohoEmbededAppSDK.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -51,7 +51,7 @@
 </head>
 <body>
     <div class="header">
-        <h2>📚 eBook Quotations</h2>
+        <h2>📚 eBooks</h2>
         <div class="subtitle" id="accountName">Loading...</div>
     </div>
     <div id="stats-container"></div>
@@ -90,7 +90,7 @@
             ZOHO.CRM.API.getRelatedRecords({
                 Entity:"Accounts",
                 RecordID:accountId,
-                RelatedList:"Quotations",
+                RelatedList:"Sales_Orders",
                 page:1,
                 per_page:200
             }).then(function(response){
